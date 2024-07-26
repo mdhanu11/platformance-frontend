@@ -4,7 +4,7 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1e90ff',
+      main: '#05CD99',
     },
     secondary: {
       main: '#00C49F',
@@ -16,11 +16,11 @@ const theme = createTheme({
   typography: {
     h4: {
       fontWeight: 'bold',
-      color: '#1e90ff',
+      color: '#05CD99',
     },
     h6: {
       fontWeight: 'bold',
-      color: '#1e90ff',
+      color: '#05CD99',
     },
   },
 });

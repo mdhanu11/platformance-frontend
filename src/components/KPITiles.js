@@ -9,9 +9,9 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  backgroundColor: '#F7F9FC', // Light background color
+  backgroundColor: '#FFFFFF', // Light background color
   color: '#0D1A26', // Dark text color
-  padding: theme.spacing(3),
+  padding: theme.spacing(2), // Reduce padding for smaller size
   borderRadius: '12px',
   textAlign: 'center',
   display: 'flex',
@@ -21,6 +21,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   '&:hover': {
     transform: 'scale(1.05)',
   },
+  minHeight: '120px', // Set a minimum height for consistency
+  width: '180px', // Explicitly set the width for smaller size
 }));
 
 const kpisTemplate = [
@@ -62,21 +64,19 @@ const KPITiles = () => {
   };
 
   return (
-    <Grid container spacing={3}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'nowrap', gap: 2 }}>
       {kpis.map((kpi) => (
-        <Grid item xs={12} sm={6} md={4} key={kpi.title}>
-          <StyledPaper elevation={3}>
-            <Avatar sx={{ bgcolor: '#A0D7E7', mb: 2 }}>{kpi.icon}</Avatar>
-            <Typography variant="subtitle1" color="textSecondary">
-              {kpi.title}
-            </Typography>
-            <Typography variant="h4" sx={{ color: '#0D1A26', fontWeight: 'bold' }}>
-              {formatValue(kpi.title, kpi.value)}
-            </Typography>
-          </StyledPaper>
-        </Grid>
+        <StyledPaper key={kpi.title} elevation={3}>
+          <Avatar sx={{ bgcolor: '#A0D7E7', mb: 1 }}>{kpi.icon}</Avatar> {/* Reduce margin-bottom */}
+          <Typography variant="subtitle1" color="textSecondary">
+            {kpi.title}
+          </Typography>
+          <Typography variant="h5" sx={{ color: '#0D1A26', fontWeight: 'bold' }}> {/* Use h5 for slightly smaller text */}
+            {formatValue(kpi.title, kpi.value)}
+          </Typography>
+        </StyledPaper>
       ))}
-    </Grid>
+    </Box>
   );
 };
 
