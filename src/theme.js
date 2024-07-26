@@ -1,41 +1,26 @@
+// theme.js
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#1e90ff',
     },
     secondary: {
-      main: '#1E90FF',
+      main: '#00C49F',
     },
     background: {
-      default: '#f4f6f8',
-      paper: '#ffffff',
-    },
-    text: {
-      primary: '#2d3748',
-      secondary: '#4a5568',
+      paper: '#F7F9FC',
     },
   },
   typography: {
     h4: {
-      fontWeight: 600,
-      color: '#2d3748',
+      fontWeight: 'bold',
+      color: '#1e90ff',
     },
     h6: {
-      fontWeight: 500,
-      color: '#4a5568',
-    },
-  },
-  components: {
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          padding: '16px',
-          borderRadius: '12px',
-          backgroundColor: '#ffffff',
-        },
-      },
+      fontWeight: 'bold',
+      color: '#1e90ff',
     },
   },
 });
