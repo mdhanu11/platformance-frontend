@@ -9,7 +9,7 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
 }));
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  backgroundColor: '#1e90ff',
+  backgroundColor: '#05CD99',
   color: theme.palette.common.white,
   fontWeight: 'bold',
 }));
@@ -46,7 +46,7 @@ const KPITable = () => {
 
   return (
     <Box>
-      <Typography variant="h6" p={2} sx={{ color: '#1e90ff', fontWeight: 'bold' }}>
+      <Typography variant="h6" p={2} sx={{ color: '#05CD99', fontWeight: 'bold' }}>
         All KPIs per Channel
       </Typography>
       <StyledTableContainer component={Paper}>
