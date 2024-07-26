@@ -1,6 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Box, TablePagination } from '@mui/material';
 import Papa from 'papaparse';
+import { styled } from '@mui/material/styles';
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  backgroundColor: '#f7f9fc',
+  borderRadius: '12px',
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  backgroundColor: '#1e90ff',
+  color: theme.palette.common.white,
+  fontWeight: 'bold',
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
 
 const KPITable = () => {
   const [data, setData] = useState([]);
@@ -28,35 +46,35 @@ const KPITable = () => {
 
   return (
     <Box>
-      <Typography variant="h6" p={2}>
+      <Typography variant="h6" p={2} sx={{ color: '#1e90ff', fontWeight: 'bold' }}>
         All KPIs per Channel
       </Typography>
-      <TableContainer component={Paper}>
+      <StyledTableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Channel</TableCell>
-              <TableCell>Spends</TableCell>
-              <TableCell>Impressions</TableCell>
-              <TableCell>Clicks</TableCell>
-              <TableCell>Ad Platform</TableCell>
-              <TableCell>Apps Flyer</TableCell>
+              <StyledTableCell>Channel</StyledTableCell>
+              <StyledTableCell>Spends</StyledTableCell>
+              <StyledTableCell>Impressions</StyledTableCell>
+              <StyledTableCell>Clicks</StyledTableCell>
+              <StyledTableCell>Ad Platform</StyledTableCell>
+              <StyledTableCell>Apps Flyer</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <TableRow key={row.channel}>
+              <StyledTableRow key={row.channel}>
                 <TableCell>{row.channel}</TableCell>
-                <TableCell>{row.spends}</TableCell>
+                <TableCell>${row.spends}</TableCell>
                 <TableCell>{row.impressions}</TableCell>
                 <TableCell>{row.clicks}</TableCell>
                 <TableCell>{row.ad_platform}</TableCell>
                 <TableCell>{row.apps_flyer}</TableCell>
-              </TableRow>
+              </StyledTableRow>
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </StyledTableContainer>
       <TablePagination
         component="div"
         count={data.length}

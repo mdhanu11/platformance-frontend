@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { Typography, Box } from '@mui/material';
 import Papa from 'papaparse';
 
@@ -38,10 +38,13 @@ const DailyGraph = () => {
     });
   }, []);
 
+  // Define a color palette
+  const colors = ['#1E90FF', '#00C49F', '#FFBB28', '#FF8042', '#FF6384', '#36A2EB', '#9966FF', '#FF9F40'];
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
-        Date-wise Spends and CPI Investments
+        Day-wise Spends and CPI Investments
       </Typography>
       <Box sx={{ overflowX: 'auto' }}>
         <Box sx={{ width: `${data.length * 80}px`, minWidth: '100%' }}>
@@ -52,8 +55,16 @@ const DailyGraph = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="spends" fill="#1E90FF" />
-              <Bar dataKey="cpi" fill="#00C49F" />
+              <Bar dataKey="spends" barSize={30}>
+                {data.map((entry, index) => (
+                  <Cell key={`cell-spends-${index}`} fill={colors[index % colors.length]} />
+                ))}
+              </Bar>
+              <Bar dataKey="cpi" barSize={30}>
+                {data.map((entry, index) => (
+                  <Cell key={`cell-cpi-${index}`} fill={colors[(index + 1) % colors.length]} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </Box>

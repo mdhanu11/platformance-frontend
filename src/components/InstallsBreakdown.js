@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts';
 import { Typography, Box, Paper } from '@mui/material';
 import Papa from 'papaparse';
 
@@ -33,6 +33,9 @@ const InstallsBreakdown = () => {
     });
   }, []);
 
+  // Define a color palette
+  const colors = ['#1E90FF', '#00C49F', '#FFBB28', '#FF8042', '#FF6384', '#36A2EB', '#9966FF', '#FF9F40'];
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -43,18 +46,16 @@ const InstallsBreakdown = () => {
           <Box sx={{ width: `${data.length * 80}px`, minWidth: '100%' }}>
             <ResponsiveContainer width="100%" height={400}>
               <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <defs>
-                  <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#1E90FF" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#1E90FF" stopOpacity={0.4} />
-                  </linearGradient>
-                </defs>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="channel" />
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="installs" fill="url(#colorUv)" barSize={30} />
+                <Bar dataKey="installs" barSize={30}>
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </Box>
