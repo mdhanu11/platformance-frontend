@@ -10,6 +10,7 @@ import InstallsBreakdown from './components/InstallsBreakdown';
 import WeeklyRevenueGraph from './components/WeeklyRevenueGraph';
 import theme from './theme';
 import SideMenu from './components/SideMenu'; // Make sure to import the SideMenu
+import CountrySpendsPieChart from './components/CountrySpendsPieChart';
 
 
 function App() {
@@ -34,6 +35,11 @@ function App() {
               <Grid item xs={12} md={6}>
                 <Box p={2} bgcolor="background.paper" borderRadius="12px">
                   <WeeklyRevenueGraph />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Box p={2} bgcolor="background.paper" borderRadius="12px">
+                  <CountrySpendsPieChart />
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
