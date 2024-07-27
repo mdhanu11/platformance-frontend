@@ -12,17 +12,18 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: '#FFFFFF', // Light background color
   color: '#0D1A26', // Dark text color
   padding: theme.spacing(2), // Reduce padding for smaller size
-  borderRadius: '12px',
+  borderRadius: '20px',
   textAlign: 'center',
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
   alignItems: 'center',
   transition: 'transform 0.2s',
   '&:hover': {
     transform: 'scale(1.05)',
   },
   minHeight: '120px', // Set a minimum height for consistency
-  width: '180px', // Explicitly set the width for smaller size
+  width: '280px', // Explicitly set the width for smaller size
+  margin: theme.spacing(1),
 }));
 
 const kpisTemplate = [
@@ -64,16 +65,18 @@ const KPITiles = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'nowrap', gap: 2 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'flex-start', gap: 2, overflowX: 'auto', width: '100%' }}>
       {kpis.map((kpi) => (
         <StyledPaper key={kpi.title} elevation={3}>
-          <Avatar sx={{ bgcolor: '#A0D7E7', mb: 1 }}>{kpi.icon}</Avatar> {/* Reduce margin-bottom */}
-          <Typography variant="subtitle1" color="textSecondary">
-            {kpi.title}
-          </Typography>
-          <Typography variant="h5" sx={{ color: '#0D1A26', fontWeight: 'bold' }}> {/* Use h5 for slightly smaller text */}
-            {formatValue(kpi.title, kpi.value)}
-          </Typography>
+          <Avatar sx={{ bgcolor: '#F5F7FE', mr: 2, color: 'primary.main' }}>{kpi.icon}</Avatar>
+          <Box sx={{ textAlign: 'left' }}>
+            <Typography variant="subtitle1" color="textSecondary">
+              {kpi.title}
+            </Typography>
+            <Typography variant="h5" sx={{ color: '#0D1A26', fontWeight: 'bold' }}>
+              {formatValue(kpi.title, kpi.value)}
+            </Typography>
+          </Box>
         </StyledPaper>
       ))}
     </Box>

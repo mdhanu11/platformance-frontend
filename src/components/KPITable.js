@@ -62,8 +62,8 @@ const KPITable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <StyledTableRow key={row.channel}>
+            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+              <StyledTableRow key={index}>
                 <TableCell>{row.channel}</TableCell>
                 <TableCell>${row.spends}</TableCell>
                 <TableCell>{row.impressions}</TableCell>

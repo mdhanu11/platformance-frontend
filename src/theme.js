@@ -14,6 +14,10 @@ const theme = createTheme({
     },
   },
   typography: {
+    h5: {
+      fontWeight: 'bold',
+      color: '#05CD99',
+    },
     h4: {
       fontWeight: 'bold',
       color: '#05CD99',
@@ -21,6 +25,9 @@ const theme = createTheme({
     h6: {
       fontWeight: 'bold',
       color: '#05CD99',
+    },
+    typography: {
+      fontFamily: 'DM Sans, Arial, sans-serif', // Update to your desired font family
     },
   },
 });
