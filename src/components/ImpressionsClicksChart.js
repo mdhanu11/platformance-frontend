@@ -4,7 +4,7 @@ import { Typography, Box, Paper } from '@mui/material';
 import Papa from 'papaparse';
 import GraphModal from './GraphModal';
 
-const DailyGraph = () => {
+const ImpressionsClicksChart = () => {
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -13,24 +13,31 @@ const DailyGraph = () => {
       download: true,
       header: true,
       complete: (result) => {
-        // Aggregate spends and CPI by date
+        // Aggregate impressions and clicks by date, filtering out zero and NaN values
         const aggregatedData = result.data.reduce((acc, row) => {
           const date = row.date;
-          const spends = parseFloat(row.spends);
-          const cpi = parseFloat(row.cpi);
+          const impressions = parseInt(row.impressions, 10);
+          const clicks = parseInt(row.clicks, 10);
 
-          if (!acc[date]) {
-            acc[date] = { date, spends: 0, cpi: 0 };
+          // Skip rows where both impressions and clicks are zero or NaN
+          if ((impressions === 0 && clicks === 0) || isNaN(impressions) || isNaN(clicks)) {
+            return acc;
           }
 
-          acc[date].spends += spends;
-          acc[date].cpi = cpi; // use the latest cpi for the date
+          if (!acc[date]) {
+            acc[date] = { date, impressions: 0, clicks: 0 };
+          }
+
+          acc[date].impressions += impressions;
+          acc[date].clicks += clicks;
 
           return acc;
         }, {});
 
-        // Convert aggregated data into an array
-        const formattedData = Object.keys(aggregatedData).map(date => aggregatedData[date]);
+        // Convert aggregated data into an array and filter out dates where both impressions and clicks are zero or NaN
+        const formattedData = Object.keys(aggregatedData)
+          .map(date => aggregatedData[date])
+          .filter(entry => (entry.impressions > 0 || entry.clicks > 0) && !isNaN(entry.impressions) && !isNaN(entry.clicks));
 
         setData(formattedData);
       },
@@ -51,7 +58,7 @@ const DailyGraph = () => {
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
-        Daily Spends and CPI Investments
+        Impressions vs Clicks Over Time
       </Typography>
       <Paper elevation={3} sx={{ p: 3, borderRadius: 2, backgroundColor: '#F7F9FC' }} onClick={handleOpenModal}>
         <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
@@ -59,19 +66,18 @@ const DailyGraph = () => {
             <ComposedChart data={data} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E0E0E0" />
               <XAxis dataKey="date" tick={{ fill: '#B0BEC5' }} />
-              <YAxis yAxisId="left" tick={{ fill: '#B0BEC5' }} label={{ value: 'Spends', angle: -90, position: 'insideLeft', offset: 10 }} />
-              <YAxis yAxisId="right" orientation="right" tick={{ fill: '#B0BEC5' }} label={{ value: 'CPI', angle: -90, position: 'insideRight', offset: 10 }} />
+              <YAxis yAxisId="left" tick={{ fill: '#B0BEC5' }} label={{ value: 'Impressions', angle: -90, position: 'insideLeft', offset: 10 }} />
+              <YAxis yAxisId="right" orientation="right" tick={{ fill: '#B0BEC5' }} label={{ value: 'Clicks', angle: -90, position: 'insideRight', offset: 10 }} />
               <Tooltip
                 contentStyle={{
                   backgroundColor: '#FFFFFF',
                   borderRadius: '10px',
                   boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
                 }}
-                formatter={(value) => `$${value.toFixed(2)}`}
               />
               <Legend wrapperStyle={{ paddingTop: '10px' }} />
-              <Bar yAxisId="left" dataKey="spends" barSize={20} fill="#05CD99" />
-              <Line yAxisId="right" type="monotone" dataKey="cpi" stroke="#84D9FC" strokeWidth={3} dot={false} activeDot={false} />
+              <Bar yAxisId="left" dataKey="impressions" barSize={20} fill="#05CD99" />
+              <Line yAxisId="right" type="monotone" dataKey="clicks" stroke="#84D9FC" strokeWidth={3} dot={false} activeDot={false} />
             </ComposedChart>
           </ResponsiveContainer>
         </Box>
@@ -80,15 +86,15 @@ const DailyGraph = () => {
         open={modalOpen} 
         onClose={handleCloseModal} 
         data={data}
-        title="Daily Spends and CPI Investments"
+        title="Impressions vs Clicks Over Time"
         xAxisKey="date"
-        barKey="spends"
-        lineKey="cpi"
-        yAxisLeftLabel="Spends"
-        yAxisRightLabel="CPI"
+        barKey="impressions"
+        lineKey="clicks"
+        yAxisLeftLabel="Impressions"
+        yAxisRightLabel="Clicks"
       />
     </Box>
   );
 };
 
-export default DailyGraph;
+export default ImpressionsClicksChart;

@@ -11,6 +11,8 @@ import WeeklyRevenueGraph from './components/WeeklyRevenueGraph';
 import theme from './theme';
 import SideMenu from './components/SideMenu'; // Make sure to import the SideMenu
 import CountrySpendsPieChart from './components/CountrySpendsPieChart';
+import ImpressionsClicksChart from './components/ImpressionsClicksChart';
+import CountryWiseInstallsCPIChart from './components/CountryWiseInstallsCPIChart';
 
 
 function App() {
@@ -34,12 +36,12 @@ function App() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <Box p={2} bgcolor="background.paper" borderRadius="12px">
-                  <WeeklyRevenueGraph />
+                  <ImpressionsClicksChart />
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Box p={2} bgcolor="background.paper" borderRadius="12px">
-                  <CountrySpendsPieChart />
+                  <CountryWiseInstallsCPIChart />
                 </Box>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -50,11 +52,6 @@ function App() {
               <Grid item xs={12} md={6}>
                 <Box p={2} bgcolor="background.paper" borderRadius="12px">
                   <InstallsBreakdown />
-                </Box>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Box p={2} bgcolor="background.paper" borderRadius="12px">
-                  <MonthlyGraph />
                 </Box>
               </Grid>
               <Grid item xs={12}>

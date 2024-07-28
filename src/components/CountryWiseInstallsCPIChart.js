@@ -4,7 +4,7 @@ import { Typography, Box, Paper } from '@mui/material';
 import Papa from 'papaparse';
 import GraphModal from './GraphModal';
 
-const DailyGraph = () => {
+const CountryWiseInstallsCPIChart = () => {
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -13,24 +13,26 @@ const DailyGraph = () => {
       download: true,
       header: true,
       complete: (result) => {
-        // Aggregate spends and CPI by date
+        // Aggregate installs and CPI by country
         const aggregatedData = result.data.reduce((acc, row) => {
-          const date = row.date;
-          const spends = parseFloat(row.spends);
+          const country = row.country;
+          const installs = parseFloat(row.apps_flyer.replace(/[$,]/g, ''));
           const cpi = parseFloat(row.cpi);
 
-          if (!acc[date]) {
-            acc[date] = { date, spends: 0, cpi: 0 };
+          if (!acc[country]) {
+            acc[country] = { country, installs: 0, cpi: 0 };
           }
 
-          acc[date].spends += spends;
-          acc[date].cpi = cpi; // use the latest cpi for the date
+          acc[country].installs += installs;
+          acc[country].cpi = cpi; // Keep the latest CPI value
 
           return acc;
         }, {});
 
-        // Convert aggregated data into an array
-        const formattedData = Object.keys(aggregatedData).map(date => aggregatedData[date]);
+        // Convert aggregated data into an array and sort by installs in descending order
+        const formattedData = Object.keys(aggregatedData)
+          .map(country => aggregatedData[country])
+          .sort((a, b) => b.installs - a.installs);
 
         setData(formattedData);
       },
@@ -51,15 +53,15 @@ const DailyGraph = () => {
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
-        Daily Spends and CPI Investments
+        Country-wise Installs vs CPI
       </Typography>
       <Paper elevation={3} sx={{ p: 3, borderRadius: 2, backgroundColor: '#F7F9FC' }} onClick={handleOpenModal}>
         <Box sx={{ width: '100%', maxWidth: '1000px', margin: '0 auto' }}>
           <ResponsiveContainer width="100%" height={400}>
             <ComposedChart data={data} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E0E0E0" />
-              <XAxis dataKey="date" tick={{ fill: '#B0BEC5' }} />
-              <YAxis yAxisId="left" tick={{ fill: '#B0BEC5' }} label={{ value: 'Spends', angle: -90, position: 'insideLeft', offset: 10 }} />
+              <XAxis dataKey="country" tick={{ fill: '#B0BEC5' }} />
+              <YAxis yAxisId="left" tick={{ fill: '#B0BEC5' }} label={{ value: 'Installs', angle: -90, position: 'insideLeft', offset: 10 }} />
               <YAxis yAxisId="right" orientation="right" tick={{ fill: '#B0BEC5' }} label={{ value: 'CPI', angle: -90, position: 'insideRight', offset: 10 }} />
               <Tooltip
                 contentStyle={{
@@ -67,10 +69,9 @@ const DailyGraph = () => {
                   borderRadius: '10px',
                   boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
                 }}
-                formatter={(value) => `$${value.toFixed(2)}`}
               />
               <Legend wrapperStyle={{ paddingTop: '10px' }} />
-              <Bar yAxisId="left" dataKey="spends" barSize={20} fill="#05CD99" />
+              <Bar yAxisId="left" dataKey="installs" barSize={20} fill="#05CD99" />
               <Line yAxisId="right" type="monotone" dataKey="cpi" stroke="#84D9FC" strokeWidth={3} dot={false} activeDot={false} />
             </ComposedChart>
           </ResponsiveContainer>
@@ -80,15 +81,15 @@ const DailyGraph = () => {
         open={modalOpen} 
         onClose={handleCloseModal} 
         data={data}
-        title="Daily Spends and CPI Investments"
-        xAxisKey="date"
-        barKey="spends"
+        title="Country-wise Installs vs CPI"
+        xAxisKey="country"
+        barKey="installs"
         lineKey="cpi"
-        yAxisLeftLabel="Spends"
+        yAxisLeftLabel="Installs"
         yAxisRightLabel="CPI"
       />
     </Box>
   );
 };
 
-export default DailyGraph;
+export default CountryWiseInstallsCPIChart;

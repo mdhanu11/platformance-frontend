@@ -30,7 +30,14 @@ const KPITable = () => {
       download: true,
       header: true,
       complete: (result) => {
-        setData(result.data);
+        const filteredData = result.data.filter(row =>
+          parseFloat(row.spends) !== 0 ||
+          parseInt(row.impressions, 10) !== 0 ||
+          parseInt(row.clicks, 10) !== 0 ||
+          parseFloat(row.ad_platform) !== 0 ||
+          parseFloat(row.apps_flyer) !== 0
+        );
+        setData(filteredData);
       },
     });
   }, []);
@@ -42,6 +49,12 @@ const KPITable = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const formatValue = (value, isCurrency = false) => {
+    const number = parseFloat(value);
+    if (isNaN(number) || number === 0) return '-';
+    return isCurrency ? `$${number.toFixed(2)}` : number.toFixed(2);
   };
 
   return (
@@ -64,12 +77,12 @@ const KPITable = () => {
           <TableBody>
             {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
               <StyledTableRow key={index}>
-                <TableCell>{row.channel}</TableCell>
-                <TableCell>${row.spends}</TableCell>
-                <TableCell>{row.impressions}</TableCell>
-                <TableCell>{row.clicks}</TableCell>
-                <TableCell>{row.ad_platform}</TableCell>
-                <TableCell>{row.apps_flyer}</TableCell>
+                <TableCell>{row.channel || '-'}</TableCell>
+                <TableCell>{formatValue(row.spends, true)}</TableCell>
+                <TableCell>{formatValue(row.impressions)}</TableCell>
+                <TableCell>{formatValue(row.clicks)}</TableCell>
+                <TableCell>{formatValue(row.ad_platform)}</TableCell>
+                <TableCell>{formatValue(row.apps_flyer)}</TableCell>
               </StyledTableRow>
             ))}
           </TableBody>

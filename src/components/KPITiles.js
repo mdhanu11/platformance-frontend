@@ -32,6 +32,7 @@ const kpisTemplate = [
   { title: 'Clicks', key: 'clicks', icon: <BarChartIcon /> },
   { title: 'Ad Platform Installs', key: 'ad_platform', icon: <ShowChartIcon /> },
   { title: 'AppsFlyer Installs', key: 'apps_flyer', icon: <TrendingUpIcon /> },
+  { title: 'CPI', key: 'cpi', icon: <TrendingUpIcon />, calculate: true },
 ];
 
 const KPITiles = () => {
@@ -42,13 +43,32 @@ const KPITiles = () => {
       download: true,
       header: true,
       complete: (result) => {
+        // Calculate total spends and installs
+        let totalSpends = 0;
+        let totalInstalls = 0;
+
         const totals = kpisTemplate.map((kpi) => {
+          if (kpi.calculate) return null; // Skip calculated metrics initially
+
           const total = result.data.reduce((acc, row) => {
             const value = row[kpi.key] ? parseFloat(row[kpi.key].replace(/[$,]/g, '')) : 0;
             return acc + (isNaN(value) ? 0 : value);
           }, 0);
+
+          if (kpi.key === 'spends') {
+            totalSpends = total;
+          }
+          if (kpi.key === 'ad_platform' || kpi.key === 'apps_flyer') {
+            totalInstalls += total;
+          }
+
           return { title: kpi.title, value: total, icon: kpi.icon };
-        });
+        }).filter(kpi => kpi !== null); // Filter out null entries
+
+        // Calculate CPI and add it to the totals
+        const cpi = totalSpends / totalInstalls;
+        totals.push({ title: 'CPI', value: isNaN(cpi) ? 0 : cpi, icon: <TrendingUpIcon /> });
+
         setKpis(totals);
       },
       error: (error) => {
@@ -60,6 +80,9 @@ const KPITiles = () => {
   const formatValue = (title, value) => {
     if (title === 'Spends') {
       return `$${value.toLocaleString()}`;
+    }
+    if (title === 'CPI') {
+      return `$${value.toFixed(2)}`;
     }
     return value.toLocaleString();
   };

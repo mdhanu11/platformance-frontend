@@ -39,6 +39,20 @@ const CountrySpendsPieChart = () => {
   // Define a color palette
   const colors = ['#1E90FF', '#00C49F', '#FFBB28', '#FF8042'];
 
+  // Custom label rendering to avoid overlap
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 1.4;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    return (
+      <text x={x} y={y} fill="black" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+        {`${data[index].country}: ${(percent * 100).toFixed(0)}%`}
+      </text>
+    );
+  };
+
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -53,9 +67,9 @@ const CountrySpendsPieChart = () => {
               nameKey="country"
               cx="50%"
               cy="50%"
-              outerRadius={150}
-              fill="#8884d8"
-              label
+              outerRadius={120}
+              labelLine={false}
+              label={renderCustomizedLabel}
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
